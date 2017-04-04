@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>confirm-dialog demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../confirm-dialog.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic confirm-dialog demo</h3>
+      <demo-snippet>
+        <template>
+          <confirm-dialog id="dialog"></confirm-dialog>
+          <input id="heading" placeholder="heading" value="Heading"/><br/>
+          <input id="body" placeholder="body" value="Are you sure?"/><br/>
+          <input id="htmlContent" placeholder="html content" value="<i>Content Slot</i>"/><br/>
+          <input id="confirm" placeholder="confirm button" value="Confirm"/><br/>
+          <input id="cancel" placeholder="cancel button" value="Cancel"/><br/>
+          <input id="delay" placeholder="delay (ms)" value="1000"/><br/>
+          <label><input id="modal" type="checkbox"/>Modal</label><br/>
+          <label><input id="withBackdrop" type="checkbox" checked/>With backdrop</label><br/>
+          <button onclick="show()">Show</button>&nbsp;
+          <button onclick="showWithProperties()">Show with properties</button><br/>
+          Last Event: <span id="feedback"></span>
+          <script>
+            var dialog = document.getElementById('dialog');
+            var heading = document.getElementById('heading');
+            var body = document.getElementById('body');
+            var confirm = document.getElementById('confirm');
+            var cancel = document.getElementById('cancel');
+            var delay = document.getElementById('delay');
+            var modal = document.getElementById('modal');
+            var withBackdrop = document.getElementById('withBackdrop');
+            var feedback = document.getElementById('feedback');
+
+            var htmlContent = document.getElementById('htmlContent');
+            var div = document.createElement('div');
+            Polymer.dom(dialog).appendChild(div);
+
+            dialog.addEventListener('result', function(e) {
+              feedback.innerText += ', on-result: ' + e.detail;
+            });
+
+            function show() {
+              div.innerHTML = htmlContent.value;
+              dialog.heading = heading.value;
+              dialog.body = body.value;
+              dialog.confirm = confirm.value;
+              dialog.cancel = cancel.value;
+              dialog.delay = Number(delay.value);
+              dialog.modal = modal.checked;
+              dialog.withBackdrop = withBackdrop.checked;
+              dialog.onResult = function(result) { feedback.innerText = "onResult("+result+")"; };
+              dialog.show();
+            }
+            function showWithProperties() {
+              div.innerHTML = htmlContent.value;
+              dialog.show({
+                heading: heading.value,
+                body: body.value,
+                confirm: confirm.value,
+                cancel: cancel.value,
+                delay: Number(delay.value),
+                modal: modal.checked,
+                withBackdrop: withBackdrop.checked,
+                onResult: function(result) { feedback.innerText = "onResult("+result+")"; }
+              });
+            }
+          </script>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>
