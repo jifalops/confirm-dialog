@@ -15,7 +15,7 @@ bower install --save confirm-dialog
 ## Demo
 <!--
 ```
-<custom-element-demo>
+<custom-element-demo height="400">
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="confirm-dialog.html">
