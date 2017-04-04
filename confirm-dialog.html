@@ -1,0 +1,142 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-styles/typography.html">
+
+<!--
+`confirm-dialog`
+A simple paper-dialog wrapper.
+
+@demo demo/index.html
+-->
+
+<dom-module id="confirm-dialog">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .title {
+        @apply --paper-font-title;
+      }
+      .body {
+        @apply --paper-font-body2;
+      }
+      .buttons {
+        margin-top: 16px;
+      }
+      paper-button {
+        @apply --confirm-dialog-button;
+      }
+    </style>
+    <paper-dialog id="dialog"
+      modal$="[[modal]]"
+      with-backdrop$="[[withBackdrop]]"
+      on-iron-overlay-opened="__onOverlayOpened"
+      on-iron-overlay-closed="__onOverlayClosed">
+      <div class="title">[[heading]]</div>
+      <div class="body">[[body]]</div>
+      <slot></slot>
+      <div class="buttons">
+        <paper-button dialog-dismiss hidden$="[[!cancel]]">[[cancel]]</paper-button>
+        <paper-button disabled$="[[confirmDisabled]]" dialog-confirm autofocus>[[confirm]]</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'confirm-dialog',
+      properties: {
+        /**
+         * Whether the confirm button is disabled.
+         * This is true until the safety timeout expires.
+         */
+        confirmDisabled: {
+          type: Boolean,
+          value: true,
+          readOnly: true
+        },
+        /**
+         * The dialog's title.
+         */
+        heading: String,
+        /**
+         * The dialog's body.
+         */
+        body: String,
+        /**
+         * The confirm button's label.
+         */
+        confirm: {
+          type: String,
+          value: 'Confirm'
+        },
+        /**
+         * The cancel button's label.
+         * Can be blank if `modal` is false.
+         */
+        cancel: {
+          type: String,
+          value: ''
+        },
+        /**
+         * Bound to the paper-dialog's modal property.
+         */
+        modal: {
+          type: Boolean,
+          value: false
+        },
+        /**
+         * Bound to the paper-dialog's withBackdrop property.
+         */
+        withBackdrop: {
+          type: Boolean,
+          value: true
+        },
+        /**
+         * The delay before the confirm button becomes accessible, in milliseconds.
+         * If 0, the confirm button will not be disabled.
+         */
+        delay: {
+          type: Number,
+          value: 1000
+        },
+        /**
+         * Called when confirmation result is ready.
+         */
+        onResult: Object,
+      },
+      show: function(properties) {
+        if (properties) {
+          for (var property in properties) {
+            if (property in this && property.indexOf('_') != 0) {
+              this[property] = properties[property];
+            }
+          }
+        }
+        this.$.dialog.open();
+      },
+      __onOverlayOpened: function(e) {
+        if (this.delay) {
+          this._setConfirmDisabled(true);
+          setTimeout(function() {
+            this._setConfirmDisabled(false);
+          }.bind(this), this.delay);
+        }
+      },
+      __onOverlayClosed: function(e, detail) {
+        // console.log('overlay closed', detail);
+        var result = Boolean(detail.confirmed && !detail.canceled);
+        this.onResult && this.onResult(result);
+        this.fire('result', result);
+      }
+      /**
+       * Fired when the confirmation result is ready.
+       *
+       * @event result
+       * @param result boolean Whether the action was confirmed.
+       */
+    });
+  </script>
+</dom-module>
