@@ -4,14 +4,12 @@
 <link rel="import" href="../paper-styles/typography.html">
 
 <!--
-`confirm-dialog`
-A simple paper-dialog wrapper.
-
-@demo demo/index.html
+CSS custom property | Description | Default
+------------------- | ----------- | -------
+`--confirm-dialog-button` | Mixin applied to buttons | {}
 -->
-
 <dom-module id="confirm-dialog">
-  <template>
+  <template strip-whitespace>
     <style>
       :host {
         display: block;
@@ -45,6 +43,14 @@ A simple paper-dialog wrapper.
   </template>
 
   <script>
+    /**
+     * `confirm-dialog`
+     * A simple paper-dialog wrapper.
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
     Polymer({
       is: 'confirm-dialog',
       properties: {
@@ -135,7 +141,7 @@ A simple paper-dialog wrapper.
        * Fired when the confirmation result is ready.
        *
        * @event result
-       * @param result boolean Whether the action was confirmed.
+       * @param {confirmed} boolean Whether the action was confirmed.
        */
     });
   </script>

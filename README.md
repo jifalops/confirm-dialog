@@ -5,7 +5,8 @@ A simple paper-dialog wrapper.
 
 ## Installation
 ```
-bower install --save confirm-dialog
+bower i -S confirm-dialog      # Polymer 2.0 hybrid (1.x compatible)
+bower i -S confirm-dialog#^0.1 # Polymer 1.x based
 ```
 
  <!--## Usage-->
@@ -90,7 +91,6 @@ Full demo:
 | [github](https://jifalops.github.io/confirm-dialog/components/confirm-dialog/demo/).
 
 API: [webcomponents.org](https://www.webcomponents.org/element/jifalops/confirm-dialog/confirm-dialog)
-| [github](https://jifalops.github.io/confirm-dialog).
 
 ## Contributing
 
